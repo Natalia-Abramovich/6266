@@ -1,0 +1,521 @@
+#include <vector>
+#include <numeric>
+#include <algorithm>
+
+#include "main.h"
+#include "detector_weather.h"
+
+uint16_t maxscattering;
+uint16_t maxindexscattering;
+uint16_t minscattering;
+uint16_t minindexscattering;
+uint16_t maxminamplitude;
+uint32_t average;
+bool bithazeorfog = false;
+bool bitdrizzle = false;
+bool bitprecipitation = false;
+bool bitfog1 = false;
+bool bitfog2 = false;
+
+uint8_t byteweather = 0;
+
+using namespace std;
+vector <bool> clear=  {0,0,0,0,0,0,0,0};
+vector <bool> haze=   {0,0,0,0,0,0,0,0};
+vector <bool> fog=    {0,0,0,0,0,0,0,0};
+vector <bool> precipitation = {0,0,0,0,0,0,0,0};
+vector <bool> drizzle={0,0,0,0,0,0,0,0};
+vector <bool> rain=   {0,0,0,0,0,0,0,0};
+vector <bool> snow=   {0,0,0,0,0,0,0,0};
+vector <bool> rain_and_snow={0,0,0,0,0,0,0,0};
+vector <bool> hail=  {0,0,0,0,0,0,0,0};
+
+
+
+class point__
+{
+public:
+  uint16_t val;
+  uint16_t idx;
+};
+
+
+
+
+#define STOPPER 0                                      /* Smaller than any datum */
+#define    MEDIAN_FILTER_SIZE    (5)
+
+uint16_t median_filter(uint16_t datum)
+{
+  struct pair
+  {
+    struct pair   *point;                              /* Pointers forming list linked in sorted order */
+    uint16_t  value;                                   /* Values to sort */
+  };
+  static struct pair buffer[MEDIAN_FILTER_SIZE] = /* Buffer of nwidth pairs */
+  {
+    0};
+  static struct pair *datpoint = buffer;               /* Pointer into circular buffer of data */
+  static struct pair small =          /* Chain stopper */
+  {
+    NULL, STOPPER};
+  static struct pair big =                /* Pointer to head (largest) of linked list.*/
+  {
+    &small, 0};
+
+  struct pair *successor;                              /* Pointer to successor of replaced data item */
+  struct pair *scan;                                   /* Pointer used to scan down the sorted list */
+  struct pair *scanold;                                /* Previous value of scan */
+  struct pair *median;                                 /* Pointer to median */
+  uint16_t i;
+
+  if (datum == STOPPER)
+  {
+    datum = STOPPER + 1;                             /* No stoppers allowed. */
+  }
+
+  if ((++datpoint - buffer)>= MEDIAN_FILTER_SIZE)
+  {
+    datpoint = buffer;                               /* Increment and wrap data in pointer.*/
+  }
+
+  datpoint->value = datum;                           /* Copy in new datum */
+  successor = datpoint->point;                       /* Save pointer to old value's successor */
+  median = &big;                                     /* Median initially to first in chain */
+  scanold = NULL;                                    /* Scanold initially null. */
+  scan = &big;                                       /* Points to pointer to first (largest) datum in chain */
+
+  /* Handle chain-out of first item in chain as special case */
+  if (scan->point == datpoint)
+  {
+    scan->point = successor;
+  }
+  scanold = scan;                                     /* Save this pointer and   */
+  scan = scan->point;                                /* step down chain */
+
+  /* Loop through the chain, normal loop exit via break. */
+  for (i = 0; i < MEDIAN_FILTER_SIZE; ++i)
+  {
+    /* Handle odd-numbered item in chain  */
+    if (scan->point == datpoint)
+    {
+      scan->point = successor;                      /* Chain out the old datum.*/
+    }
+
+    if (scan->value < datum)                        /* If datum is larger than scanned value,*/
+    {
+      datpoint->point = scanold->point;             /* Chain it in here.  */
+      scanold->point = datpoint;                    /* Mark it chained in. */
+      datum = STOPPER;
+    };
+
+    /* Step median pointer down chain after doing odd-numbered element */
+    median = median->point;                       /* Step median pointer.  */
+    if (scan == &small)
+    {
+      break;                                      /* Break at end of chain  */
+    }
+    scanold = scan;                               /* Save this pointer and   */
+    scan = scan->point;                           /* step down chain */
+
+    /* Handle even-numbered item in chain.  */
+    if (scan->point == datpoint)
+    {
+      scan->point = successor;
+    }
+
+    if (scan->value < datum)
+    {
+      datpoint->point = scanold->point;
+      scanold->point = datpoint;
+      datum = STOPPER;
+    }
+
+    if (scan == &small)
+    {
+      break;
+    }
+
+    scanold = scan;
+    scan = scan->point;
+  }
+  return median->value;
+}
+
+void particle_scattering(uint16_t PS0x, uint16_t* fscattering)             //     получаем массив частиц рассеивания fscattering[10240] поэлементно вычитая значение фона из входного массива
+{
+   for (int i = 0; i < COUNT_MEASURES; i++)
+   {
+     fscattering[ i ] = median_filter( (profile[ i ] >= PS0x) ? (profile[ i ] - PS0x) : (PS0x) );        // фильтр скользящего среднего с окном 5
+   }
+}
+
+void maxmin_scattering(uint16_t* fscattering)
+{                                                                 // находим минимальное значение сигнала прямого рассеяния minscattering и находим среднее арифметическое значение
+
+   maxscattering = 0;
+   for ( int i = 0; i < COUNT_MEASURES; i++ )
+   {
+      if ( fscattering[ i ] > maxscattering )
+      {
+        maxscattering = fscattering[ i ];
+        maxindexscattering = i;
+      }
+   }
+   minscattering = 65535;
+   average=0;
+   for ( int i = 2; i < 10192; i++ )
+   {
+     if ( fscattering[ i ] < minscattering )
+     {
+       minscattering = fscattering[ i ];
+       minindexscattering = i;
+     }
+     average += fscattering[ i ];
+   }
+   average/=10190;
+   maxminamplitude = maxscattering - minscattering;
+}
+void flag_weather( uint16_t* fscattering)
+{
+  uint16_t clearthreshold=150;
+  uint16_t noisethreshold=75;
+  uint16_t hazethreshold=50;
+  uint16_t fogthreshold=400;
+  uint16_t diffdrizzlethreshold=125;
+  uint16_t diffprecipitationthreshold=300;
+
+  if (minscattering > clearthreshold - noisethreshold + hazethreshold )     //минимальное значение > порога «ясно» - шумы + порог дымки
+  {
+    bithazeorfog = true;      //окно дымка
+  }
+  if (minscattering > clearthreshold - noisethreshold + fogthreshold )    //минимальное значение > порога «ясно» - шумы + порог тумана
+  {
+    bitfog1 = true;      //окно туман1
+  }
+  if (average > clearthreshold + fogthreshold)     //среднее значение > порога «ясно» + порог тумана
+  {
+    bitfog2 = true;        //окно туман 2
+  }
+
+  uint16_t diffscattering=0;
+  for ( int i = 6; i < 10193; i++ )
+  {       
+    diffscattering = fscattering[i] - fscattering[i-4];       //diffscattering[n] - Сдвиг дифференцирования
+    
+    if (diffprecipitationthreshold > diffscattering)
+      if (diffscattering > diffdrizzlethreshold )   //если есть точки > порога   
+        bitdrizzle = true;
+    if(profile[i] > diffprecipitationthreshold )   
+      bitprecipitation = true;                                  //bitprecipitation = 1;  //есть осадки //окно "осадки"
+    
+   }
+}
+
+double search_for_extremes(uint16_t* fscattering)
+{
+
+  uint16_t noisethreshold=75;
+
+  uint16_t diffprecipitationthreshold=300;
+
+  vector < class point__ > points;
+  int16_t                  prediff = 0;
+  int16_t                  curdiff;
+
+  double T_fl=0;
+  uint16_t diffscattering;
+  /*if(bitprecipitation == true) 
+    for ( int i = 0; i < COUNT_MEASURES; i++ )
+    {    
+      if(profile[i] < diffprecipitationthreshold + noisethreshold) 
+        profile[i] = 0;
+    } */ 
+  if (bitprecipitation == 1 || bitdrizzle == 1)
+  {
+    for ( int i = 6; i < COUNT_MEASURES; i++ )
+    {
+      diffscattering = fscattering[i]-fscattering[i-4];
+      if(diffscattering < diffprecipitationthreshold || 
+         (diffscattering < diffprecipitationthreshold + noisethreshold && bitprecipitation ==1))
+        diffscattering=0;
+      
+      curdiff = diffscattering;
+      if ( (prediff > 0) && (curdiff == 0) )
+      {
+        if(points.size()==0)
+          points.push_back( point__{ fscattering[ i - 1 ], static_cast< uint16_t > ( i - 1 ) } );
+        if (points.back().idx + 15 < i-1 )
+        {
+          points.push_back( point__{ fscattering[ i - 1 ], static_cast< uint16_t > ( i - 1 ) } );
+        }
+        else
+          if (points.back().val < fscattering[ i - 1 ])
+          { 
+            points.back().val=fscattering[ i - 1 ];   
+            points.back().idx= i - 1; 
+          } 
+      }  
+      prediff = curdiff;          
+    } 
+    sort(points.begin(), points.end(), [](const point__ &a, const point__ &b)
+    {
+            if (a.val > b.val)
+            {
+              return true;
+            }
+            return false;
+          }
+        );
+            int a=fscattering[0];
+          //for max value
+           //Измеряем время полета частицы по уровню амплитуда экстремума минус среднее значение деленное 3.
+ /*        for(int j=0;j<points.size(); j++)
+         {
+            bool plus  = false;
+            bool minus = false;
+            for ( int i = 0; i < 100; i++ )
+            {   
+              if ( (p.val - average / 3 ) > fscattering[ p.idx - i ] )
+              { 
+                minus = true;
+              }
+              if ( (p.val - average / 3 ) > fscattering[ p.idx + i ] )     
+              {       
+                plus = true;   
+              }
+                       }
+                       if (plus==0;
+                           minus == 0)  return true;
+                       return false;
+         }
+          remove_if( points.begin(), points.end(), []( const point__& p )
+                     {
+                       bool plus  = false;
+                       bool minus = false;
+                       for ( int i = 0; i < 100; i++ )
+                       {
+                         int a=fscattering[0];
+                         if ( (p.val - average / 3 ) > fscattering[ p.idx - i ] )
+                         {
+                            minus = true;
+                         }
+                         if ( (p.val - average / 3 ) > fscattering[ p.idx + i ] )
+                         {
+                            plus = true;
+                         }
+                       }
+                       if (plus==0;
+                           minus == 0)  return true;
+                       return false;
+                     } );*/
+          if ( points.size() > 6 )
+          {
+              points.erase(points.begin()+6,points.end());
+          }
+          int size= points.size();
+          int index_max=0;
+          for(int i=0;i<points.size();i++)
+          {
+
+            double level = (points[i].val - average) / 3;
+            int index = 1;
+            int begin=-1;
+            int end=-1;
+            while(end==-1 || begin==-1 )
+            {
+              if(begin==-1 &&  fscattering[ points[i].idx - index]<=level)
+                begin=index-1;
+               if(end==-1 &&  fscattering[ points[i].idx + index]<=level)
+                end=index-1;
+               index++;
+            }
+
+            if((end + begin)+1>150)
+            {
+                points.erase( points.begin()+i);
+                i--;
+                continue;
+            }
+            points[i].val=(end + begin)+1;
+
+            T_fl+=(end + begin)+1;
+            if( points[i].val>points[index_max].val)
+              index_max=i;
+          }
+          if(points.size())
+          {
+              if(points[index_max].val>15)
+              {
+
+                T_fl -= points[index_max].val;
+                points.erase( points.begin()+index_max);
+              }
+
+              T_fl /= points.size();
+          }
+        }
+  return T_fl;
+}
+
+void clear_vectors()
+{
+ clear.erase(clear.begin());
+ clear.emplace_back(0);
+ haze.erase(haze.begin());
+ haze.emplace_back(0);
+ fog.erase(fog.begin());
+ fog.emplace_back(0);
+ precipitation.erase(precipitation.begin());
+ precipitation.emplace_back(0);
+ drizzle.erase(drizzle.begin());
+ drizzle.emplace_back(0);
+ rain.erase(rain.begin());
+ rain.emplace_back(0);
+ snow.erase(snow.begin());
+ snow.emplace_back(0);
+ rain_and_snow.erase(rain_and_snow.begin());
+ rain_and_snow.emplace_back(0);
+ hail.erase(hail.begin());
+ hail.emplace_back(0);  
+}
+
+void fill_vectors_weather(uint16_t* fscattering, uint16_t visibility, int16_t termo_val )
+{
+  
+  double T_fl = search_for_extremes(fscattering);         //  Находим 6 экстремумов с максимальной амплитудой
+  float temperature = (( float )termo_val) / 10.0f;
+  clear_vectors();
+  if ( !bithazeorfog && !bitfog1 && ! bitfog2 && !bitdrizzle && !bitprecipitation )    /*Clear*/
+  {
+    clear[7]=1;
+  }
+  else
+        {
+          if ( bithazeorfog || bitfog1 || bitfog2)
+          {
+            if ( visibility < 1000 )
+            {
+
+              fog.back()=true;      /*Fog*/
+            }
+            else
+            {
+              if (visibility < 10000)
+              {
+                 /*Haze*/
+                haze[7]=1;
+              }
+              else
+              {
+                 /*Clear*/
+                clear[7]=1;
+                bithazeorfog = 0;
+                bitfog1 = 0;
+                bitfog2 = 0;
+              }
+
+            }
+          }
+           
+              if( temperature>=6 )
+             {
+               if   (bitprecipitation == 1)
+               {
+                  precipitation[7] = 1;
+                  if (T_fl < 5 )
+                  {
+                    if (temperature>=15)
+                    {
+                       hail[7] = 1;   /*Hail*/
+                    }
+                  }
+                  else
+                  {
+                    rain [7] = 1;
+                    bitdrizzle = 0;
+                  }
+               }
+               else
+                 if (bitdrizzle)
+                 {
+                   precipitation[7] = 1;   //Drizzle
+                   drizzle[7]=1;
+                 }
+             }
+             if ( temperature < 0 )
+               {
+                 if ( bitprecipitation || bitdrizzle )
+                 {
+                   precipitation[7] = 1;     //Snow
+                   snow[7]=1;
+                 }
+               }
+            if ( temperature >= 0 && temperature < 6 )
+            {
+                if (bitprecipitation)
+                {
+                    precipitation[7] = 1;   /*40 Precipitation*/
+                    if (T_fl > 20 )
+                    {
+                      byteweather == 1;
+                      snow [7] = 1;
+                    }
+                    else
+                    {
+                      if (T_fl > 15 )
+                      {
+                        byteweather == 1;   /*68 Rain and snow*/
+                        rain_and_snow[7]=1;
+                      }
+          else
+                      {
+                        rain [7] = 1;     /*60 Rain*/
+                      }
+                    }
+                }
+                else
+                  if  (bitdrizzle)
+                  {
+                    precipitation[7] = 1;
+                  }
+            }
+        }
+}
+
+vector < uint8_t > pheno_coll(9, 0);
+uint8_t const phenocodes[] = { 0x00, 0x04, 0x30, 0x40, 0x50, 0x60, 0x68, 0x70, 0x89};
+uint8_t vote_pheno(void)
+{
+  pheno_coll[0] = std::accumulate(clear.begin(), clear.end(), 0);
+  pheno_coll[1]= std::accumulate(haze.begin(), haze.end(), 0);
+  pheno_coll[2]= std::accumulate(fog.begin(), fog.end(), 0);
+  pheno_coll[3]= std::accumulate(precipitation.begin(), precipitation.end(), 0);
+  pheno_coll[4]= std::accumulate(drizzle.begin(), drizzle.end(), 0);
+  pheno_coll[5]= std::accumulate(rain.begin(), rain.end(), 0);
+  pheno_coll[6]= std::accumulate(rain_and_snow.begin(), rain_and_snow.end(), 0);
+  pheno_coll[7]= std::accumulate(snow.begin(), snow.end(), 0);
+  pheno_coll[8]= std::accumulate(hail.begin(), hail.end(), 0);
+  int max_value=pheno_coll[0];
+  int index=0;
+  for (int i=1; i<7; i++)
+  {
+    if(pheno_coll[i]>=3)
+      index=i;
+  }  
+  return phenocodes[index];
+}   
+
+uint8_t weather(uint16_t PS0x, uint16_t visibility, int16_t termo_val)
+{
+  uint16_t fscattering[10560];
+  bithazeorfog = false;
+  bitdrizzle = false;
+  bitprecipitation = false;
+
+  particle_scattering(PS0x, fscattering);    // рассеянее частиц
+  maxmin_scattering(fscattering);          // максимальный и минимальный элемент рассеяния
+  flag_weather(fscattering);               // устанавливаем флаги погоды
+  fill_vectors_weather(fscattering, visibility, termo_val);
+  return vote_pheno();/* */
+}

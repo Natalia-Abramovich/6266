@@ -1,0 +1,324 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+  Version="10.0"
+  VendorName="SlickEdit"
+  TemplateName="Other C/C++"
+  WorkingDir=".">
+  <Config
+    Name="Debug"
+    Type="cpp"
+    DebugCallbackName="gdb"
+    OutputFile="%bd6266.01.05.300"
+    CompilerConfigName="Latest Version">
+    <Menu>
+      <Target
+        Name="Compile"
+        MenuCaption="&amp;Compile"
+        CaptureOutputWith="ProcessBuffer"
+        OutputExts="*.o"
+        SaveOption="SaveCurrent"
+        RunFromDir="%rp..\MDK_ARM\">
+        <Exec CmdLine='"tran.bat" "n"'/>
+      </Target>
+      <Target
+        Name="Link"
+        MenuCaption="&amp;Link">
+        <Exec CmdLine='cc -g -o "%o" %f %libs'/>
+      </Target>
+      <Target
+        Name="Build"
+        MenuCaption="&amp;Build"
+        CaptureOutputWith="ProcessBuffer"
+        SaveOption="SaveWorkspaceFiles"
+        RunFromDir="c:\work\6266\6266_20\soft\6266.01.05.300_dpg\6266.01.05.300_dpg\EWARM\">
+        <Exec CmdLine='"d:\Program Files (x86)\iarsys\ewarm8505\common\bin\iarbuild.exe" %rp\..\ewarm\6266.01.05.300_dpg.ewp -build 6266.01.05.300_dpg -log all'/>
+      </Target>
+      <Target
+        Name="Rebuild"
+        MenuCaption="&amp;Rebuild"
+        CaptureOutputWith="ProcessBuffer"
+        SaveOption="SaveWorkspaceFiles"
+        RunFromDir="%rw">
+        <Exec CmdLine='"%(VSLICKBIN1)vsbuild" rebuild "%w" "%r"'/>
+      </Target>
+      <Target
+        Name="Debug"
+        MenuCaption="&amp;Debug"
+        SaveOption="SaveNone"
+        BuildFirst="1"
+        CaptureOutputWith="ProcessBuffer"
+        RunFromDir="%rw">
+        <Exec CmdLine='vsdebugio -prog "%o"'/>
+      </Target>
+      <Target
+        Name="Execute"
+        MenuCaption="E&amp;xecute"
+        SaveOption="SaveNone"
+        BuildFirst="1"
+        CaptureOutputWith="ProcessBuffer"
+        RunFromDir="%rw">
+        <Exec CmdLine='"%o"'/>
+      </Target>
+    </Menu>
+  </Config>
+  <Config
+    Name="Release"
+    Type="cpp"
+    DebugCallbackName="gdb"
+    OutputFile="%bd6266.01.05.300"
+    CompilerConfigName="Latest Version">
+    <Menu>
+      <Target
+        Name="Compile"
+        MenuCaption="&amp;Compile"
+        CaptureOutputWith="ProcessBuffer"
+        SaveOption="SaveCurrent"
+        OutputExts="*.o"
+        RunFromDir="C:\work\6266\6266_20\soft\6266.01.05.300\6266.01.05.300\MDK-ARM\">
+        <Exec CmdLine='"C:\work\6266\6266_20\soft\6266.01.05.300\6266.01.05.300\MDK-ARM\tran.BAT" %n'/>
+      </Target>
+      <Target
+        Name="Link"
+        MenuCaption="&amp;Link">
+        <Exec CmdLine='cc -O -o "%o" %f %libs'/>
+      </Target>
+      <Target
+        Name="Build"
+        MenuCaption="&amp;Build"
+        CaptureOutputWith="ProcessBuffer"
+        SaveOption="SaveWorkspaceFiles"
+        RunFromDir="c:\work\6266\6266_20\soft\6266.01.05.300_dpg\6266.01.05.300_dpg\EWARM\">
+        <Exec CmdLine='"d:\Program Files (x86)\iarsys\ewarm8505\common\bin\iarbuild.exe" %rp\..\ewarm\6266.01.05.300_dpg.ewp -build 6266.01.05.300_dpg -log all'/>
+      </Target>
+      <Target
+        Name="Rebuild"
+        MenuCaption="&amp;Rebuild"
+        CaptureOutputWith="ProcessBuffer"
+        SaveOption="SaveWorkspaceFiles"
+        RunFromDir="%rw">
+        <Exec CmdLine='"%(VSLICKBIN1)vsbuild" rebuild "%w" "%r"'/>
+      </Target>
+      <Target
+        Name="Debug"
+        MenuCaption="&amp;Debug"
+        SaveOption="SaveNone"
+        BuildFirst="1"
+        CaptureOutputWith="ProcessBuffer"
+        RunFromDir="%rw">
+        <Exec CmdLine='vsdebugio -prog "%o"'/>
+      </Target>
+      <Target
+        Name="Execute"
+        MenuCaption="E&amp;xecute"
+        SaveOption="SaveNone"
+        BuildFirst="1"
+        CaptureOutputWith="ProcessBuffer"
+        RunFromDir="%rw">
+        <Exec CmdLine='"%o"'/>
+      </Target>
+    </Menu>
+  </Config>
+  <Rules Name="Compile">
+    <Rule
+      InputExts="*.s"
+      OutputExts="*.o"
+      LinkObject="1">
+      <Exec CmdLine='as -o "%bd%n.o" "%f"'/>
+    </Rule>
+  </Rules>
+  <Files>
+    <Folder
+      Name="Source Files"
+      Filters="*.c;*.C;*.cc;*.cpp;*.cp;*.cxx;*.c++;*.prg;*.pas;*.dpr;*.asm;*.s;*.bas;*.java;*.cs;*.sc;*.scala;*.e;*.cob;*.html;*.rc;*.tcl;*.py;*.pl;*.d;*.m;*.mm;*.go;*.groovy;*.gsh"
+      GUID="{DBEBD2BF-F595-43E7-4081-9F4478F82B8E}">
+      <Folder
+        Name="Drivers"
+        AutoCustom="1"
+        GUID="{2B508709-25A2-4F04-BD02-755AB453519B}">
+        <Folder
+          Name="STM32F3xx_HAL_Driver"
+          AutoCustom="1"
+          GUID="{EB5D754E-4400-4A91-01D3-F905DA1ECBA8}">
+          <Folder
+            Name="Src"
+            AutoCustom="1"
+            GUID="{2FA00BF0-AB1C-4AA5-248B-0CBC5F6E46BA}">
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_iwdg.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_spi.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_spi_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c"/>
+          </Folder>
+        </Folder>
+      </Folder>
+      <Folder
+        Name="Src"
+        AutoCustom="1"
+        GUID="{F4163BF9-6F9B-4AE1-70F6-BAD38E205085}">
+        <F N="../Src/eeprom.c"/>
+        <F N="../Src/gpio.c"/>
+        <F N="../Src/hcms.c"/>
+        <F N="../Src/i2c.c"/>
+        <F N="../Src/iwdg.c"/>
+        <F N="../Src/main.c"/>
+        <F N="../Src/nonvol.cpp"/>
+        <F N="/r/MY/6284t/Src/preprocessing.c"/>
+        <F N="/r/MY/6284t/Src/processing"/>
+        <F N="../Src/spi.c"/>
+        <F N="../Src/stm32f3xx_hal_msp.c"/>
+        <F N="../Src/stm32f3xx_it.c"/>
+        <F N="../Src/system_stm32f3xx.c"/>
+        <F N="../Src/tim.c"/>
+        <F N="../Src/usart.c"/>
+        <F N="../Src/zngvert.c"/>
+      </Folder>
+    </Folder>
+    <Folder
+      Name="Header Files"
+      Filters="*.h;*.H;*.hh;*.hpp;*.hxx;*.h++;*.inc;*.sh;*.cpy;*.if"
+      GUID="{9726150D-636B-4795-800C-59080EC5109A}">
+      <Folder
+        Name="Drivers"
+        AutoCustom="1"
+        GUID="{9524C372-B2EC-4ADE-27E0-38A11836C2B4}">
+        <Folder
+          Name="CMSIS"
+          AutoCustom="1"
+          GUID="{E5A3598D-41ED-413C-D8AE-11182BA56495}">
+          <Folder
+            Name="Device"
+            AutoCustom="1"
+            GUID="{B89DCD82-E72D-4E84-9E85-ACA5B96574A4}">
+            <Folder
+              Name="ST"
+              AutoCustom="1"
+              GUID="{C64C1CDA-D859-4232-83F4-87210C8A40BB}">
+              <Folder
+                Name="STM32F3xx"
+                AutoCustom="1"
+                GUID="{E56DA384-EDE9-413A-CDD2-E53078441C9F}">
+                <Folder
+                  Name="Include"
+                  AutoCustom="1"
+                  GUID="{F079B446-C514-410F-128B-480859198294}">
+                  <F N="../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xe.h"/>
+                  <F N="../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h"/>
+                  <F N="../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h"/>
+                </Folder>
+              </Folder>
+            </Folder>
+          </Folder>
+          <Folder
+            Name="Include"
+            AutoCustom="1"
+            GUID="{69C6C399-5B3A-487E-7AA4-091B93C0BFA4}">
+            <F N="../Drivers/CMSIS/Include/cmsis_armcc.h"/>
+            <F N="../Drivers/CMSIS/Include/cmsis_armclang.h"/>
+            <F N="../Drivers/CMSIS/Include/cmsis_compiler.h"/>
+            <F N="../Drivers/CMSIS/Include/cmsis_gcc.h"/>
+            <F N="../Drivers/CMSIS/Include/cmsis_iccarm.h"/>
+            <F N="../Drivers/CMSIS/Include/cmsis_version.h"/>
+            <F N="../Drivers/CMSIS/Include/core_armv8mbl.h"/>
+            <F N="../Drivers/CMSIS/Include/core_armv8mml.h"/>
+            <F N="../Drivers/CMSIS/Include/core_cm3.h"/>
+            <F N="../Drivers/CMSIS/Include/core_cm33.h"/>
+            <F N="../Drivers/CMSIS/Include/core_cm4.h"/>
+            <F N="../Drivers/CMSIS/Include/core_sc000.h"/>
+            <F N="../Drivers/CMSIS/Include/core_sc300.h"/>
+            <F N="../Drivers/CMSIS/Include/mpu_armv7.h"/>
+            <F N="../Drivers/CMSIS/Include/mpu_armv8.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_iwdg.h"/>
+            <F N="../Drivers/CMSIS/Include/tz_context.h"/>
+          </Folder>
+        </Folder>
+        <Folder
+          Name="STM32F3xx_HAL_Driver"
+          AutoCustom="1"
+          GUID="{FAFF39D4-A67C-4222-98E0-82F91ED9A69C}">
+          <Folder
+            Name="Inc"
+            AutoCustom="1"
+            GUID="{1D06F7B0-1EF9-412B-709F-DE79C96F8196}">
+            <Folder
+              Name="Legacy"
+              AutoCustom="1"
+              GUID="{E3CA099C-955E-4699-CFB3-F4BB9498F6AF}">
+              <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h"/>
+            </Folder>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_def.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_exti.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_gpio.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_gpio_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart.h"/>
+            <F N="../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart_ex.h"/>
+          </Folder>
+        </Folder>
+      </Folder>
+      <Folder
+        Name="Inc"
+        AutoCustom="1"
+        GUID="{339B6ADF-C4D6-4D2F-C786-624686E812AA}">
+        <F N="../Inc/eeprom.h"/>
+        <F N="../Inc/gpio.h"/>
+        <F N="../Inc/hcms.h"/>
+        <F N="../Inc/i2c.h"/>
+        <F N="../Inc/iwdg.h"/>
+        <F N="../Inc/main.h"/>
+        <F N="../Inc/nonvol.h"/>
+        <F N="/r/MY/6284t/Src/preprocessing.h"/>
+        <F N="/r/MY/6284t/Src/processing.h"/>
+        <F N="../Inc/spi.h"/>
+        <F N="../Inc/stm32f3xx_hal_conf.h"/>
+        <F N="../Inc/stm32f3xx_it.h"/>
+        <F N="../Inc/tim.h"/>
+        <F N="../Inc/typevals.h"/>
+        <F N="../Inc/usart.h"/>
+        <F N="../Inc/zng.h"/>
+      </Folder>
+      <F N="../Inc/typedefs_6266.h"/>
+    </Folder>
+    <Folder
+      Name="Resource Files"
+      Filters="*.ico;*.cur;*.dlg"
+      GUID="{C5B8D49E-9BA9-433D-C8AE-C6AC720FF29A}"/>
+    <Folder
+      Name="Bitmaps"
+      Filters="*.bmp"
+      GUID="{0B87A151-6EF5-43F1-CB51-9E752281AF80}"/>
+    <Folder
+      Name="Other Files"
+      Filters=""
+      GUID="{553D7597-30C7-4232-1E11-443CCD143694}"/>
+  </Files>
+</Project>

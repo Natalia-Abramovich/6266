@@ -1,0 +1,42 @@
+stm32f3xx_hal_pwr.pbi: \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\Drivers\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_pwr.c \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Inc\stm32f3xx_hal_conf.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_rcc.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_def.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Device/ST/STM32F3xx/Include\stm32f3xx.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xe.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Include\core_cm4.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\stdint.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\ycheck.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\yvals.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Defaults.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Config_Full.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Product.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Include/cmsis_version.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Include/cmsis_compiler.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Include\cmsis_iccarm.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\iccarm_builtin.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Include/mpu_armv7.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\stddef.h \
+  E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\ysizet.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_gpio.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_gpio_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_exti.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_dma.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_cortex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_flash.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_i2c.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_iwdg.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_pwr.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_tim.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc\stm32f3xx_hal_uart.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart_ex.h

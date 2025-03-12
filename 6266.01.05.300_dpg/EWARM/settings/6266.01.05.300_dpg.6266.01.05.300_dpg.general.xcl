@@ -1,0 +1,15 @@
+"E:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armproc.dll" 
+
+"E:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armjlink2.dll" 
+
+"E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM\6266.01.05.300_dpg\Exe\6266.01.05.300_dpg.out" 
+
+--plugin="E:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armbat.dll" 
+
+--device_macro="E:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\config\debugger\ST\STM32F3xx.dmac" 
+
+--flash_loader="E:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\config\flashloader\ST\FlashSTM32F3xxxE.board" 
+
+
+
+
