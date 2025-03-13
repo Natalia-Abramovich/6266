@@ -61,7 +61,7 @@ void pkt_peleng(uint32_t send_val, uint16_t pogoda )
   obuf[13] = (send_val % 10ul) + '0';*/
  /*////////////////////*/
   //////
-  if(set_weather)
+ /* if(set_weather)
   {
     obuf[9] = ((pogoda >> 4) & 0xf) + 0x30;
     obuf[10] = (pogoda & 0xf) + 0x30;
@@ -71,7 +71,7 @@ void pkt_peleng(uint32_t send_val, uint16_t pogoda )
   {
     obuf[9] =  '0';
     obuf[10] = '0';
-  } /**/
+  } */
 
   for (i = 1; i < 14; i++)
   {

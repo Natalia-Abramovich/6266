@@ -38,6 +38,7 @@ build nonvol.pbi : index nonvol.xcl
 build OneWire.pbi : index OneWire.xcl
 build push_pop.pbi : index push_pop.xcl
 build requests.pbi : index requests.xcl
+build stack.pbi : index stack.xcl
 build stm32f3xx_hal_msp.pbi : index stm32f3xx_hal_msp.xcl
 build stm32f3xx_it.pbi : index stm32f3xx_it.xcl
 build termo.pbi : index termo.xcl
@@ -66,11 +67,11 @@ build stm32f3xx_hal_uart.pbi : index stm32f3xx_hal_uart.xcl
 build stm32f3xx_hal_uart_ex.pbi : index stm32f3xx_hal_uart_ex.xcl
 build 6266.01.05.300_dpg_part0.pbi : link algorithm_contamination.pbi approximation.pbi command_processing.pbi console.pbi data.pbi detector_weather.pbi eeprom.pbi
 build 6266.01.05.300_dpg_part1.pbi : link gpio.pbi hcms.pbi heating.pbi i2c.pbi iwdg.pbi main.pbi memory.pbi
-build 6266.01.05.300_dpg_part2.pbi : link nonvol.pbi OneWire.pbi push_pop.pbi requests.pbi stm32f3xx_hal_msp.pbi stm32f3xx_it.pbi termo.pbi
-build 6266.01.05.300_dpg_part3.pbi : link tim.pbi transfer.pbi usart.pbi zngvert.pbi system_stm32f3xx.pbi stm32f3xx_hal.pbi stm32f3xx_hal_cortex.pbi
-build 6266.01.05.300_dpg_part4.pbi : link stm32f3xx_hal_dma.pbi stm32f3xx_hal_exti.pbi stm32f3xx_hal_flash.pbi stm32f3xx_hal_flash_ex.pbi stm32f3xx_hal_gpio.pbi stm32f3xx_hal_i2c.pbi stm32f3xx_hal_i2c_ex.pbi
-build 6266.01.05.300_dpg_part5.pbi : link stm32f3xx_hal_iwdg.pbi stm32f3xx_hal_pwr.pbi stm32f3xx_hal_pwr_ex.pbi stm32f3xx_hal_rcc.pbi stm32f3xx_hal_rcc_ex.pbi stm32f3xx_hal_tim.pbi stm32f3xx_hal_tim_ex.pbi
-build 6266.01.05.300_dpg_part6.pbi : link stm32f3xx_hal_uart.pbi stm32f3xx_hal_uart_ex.pbi
+build 6266.01.05.300_dpg_part2.pbi : link nonvol.pbi OneWire.pbi push_pop.pbi requests.pbi stack.pbi stm32f3xx_hal_msp.pbi stm32f3xx_it.pbi
+build 6266.01.05.300_dpg_part3.pbi : link termo.pbi tim.pbi transfer.pbi usart.pbi zngvert.pbi system_stm32f3xx.pbi stm32f3xx_hal.pbi
+build 6266.01.05.300_dpg_part4.pbi : link stm32f3xx_hal_cortex.pbi stm32f3xx_hal_dma.pbi stm32f3xx_hal_exti.pbi stm32f3xx_hal_flash.pbi stm32f3xx_hal_flash_ex.pbi stm32f3xx_hal_gpio.pbi stm32f3xx_hal_i2c.pbi
+build 6266.01.05.300_dpg_part5.pbi : link stm32f3xx_hal_i2c_ex.pbi stm32f3xx_hal_iwdg.pbi stm32f3xx_hal_pwr.pbi stm32f3xx_hal_pwr_ex.pbi stm32f3xx_hal_rcc.pbi stm32f3xx_hal_rcc_ex.pbi stm32f3xx_hal_tim.pbi
+build 6266.01.05.300_dpg_part6.pbi : link stm32f3xx_hal_tim_ex.pbi stm32f3xx_hal_uart.pbi stm32f3xx_hal_uart_ex.pbi
 build 6266.01.05.300_dpg.pbd : link 6266.01.05.300_dpg_part0.pbi 6266.01.05.300_dpg_part1.pbi 6266.01.05.300_dpg_part2.pbi 6266.01.05.300_dpg_part3.pbi 6266.01.05.300_dpg_part4.pbi 6266.01.05.300_dpg_part5.pbi 6266.01.05.300_dpg_part6.pbi
 build 6266.01.05.300_dpg.pbw : browsedata 6266.01.05.300_dpg.pbd
 

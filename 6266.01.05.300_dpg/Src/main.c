@@ -1216,25 +1216,6 @@ int main(void)
   flag_unification =  read_in_mem("unification",(0),384);  
   flag_cs =  read_in_mem("CS",(0),4672);   
 
- // pprs.MORmsb = read123("MORmsb",(50001),1472);
-
- /* calibration_value.MORmsb = read123("MORmsb",(50000),0);
-  calibration_value.PSmsb = read123("PSmsb",(0.2),64);
-  calibration_value.MORlsb = read123("MORlsb",(285),128);
-  calibration_value.PSlsb = read123("PSlsb",(1400),192);
-
-  if( calibration_value.MORmsb < calibration_value.MORlsb ||
-      calibration_value.PSmsb > calibration_value.PSlsb ||
-      calibration_value.PSmsb > 200 || 
-      calibration_value.PSlsb < 400)
-  {
-    calibration(0, 1);
-  }
- 
-  uni_calibration_value.MORmsb = read123("MORmsb",(26000),3328);
-  uni_calibration_value.PSmsb = read123("PSmsb",(13),3392);
-  uni_calibration_value.MORlsb = read123("MORlsb",(285),3456);
-  uni_calibration_value.PSlsb = read123("PSlsb",(1400),3520);*/
 
 
   pprs.CORR = read_in_mem("CORR_val",(-3.5),256);

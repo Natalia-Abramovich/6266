@@ -18,15 +18,7 @@ double  pop(uint8_t stk_lvl,  double* stack)
   return rslt /= (double)stk_lvl;
 }
 
-/*template<typename Type>
-void push(uint8_t &stk_lvl, uint8_t max_stk_lvl, uint8_t &stk_idx, Type value, Type* stack)
-{
-  stk_idx = (stk_idx + 1) % max_stk_lvl;
-  if (stk_lvl < max_stk_lvl)
-  {
-    stk_lvl++;
-  }  
-}*/
+
 void push(uint8_t &stk_lvl, uint8_t max_stk_lvl, uint8_t &stk_idx, double value, double* stack)
 {
  stack[stk_idx] = value;

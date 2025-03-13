@@ -1485,6 +1485,12 @@
                 <name>$PROJ_DIR$\..\Src\requests.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\stack.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\stack.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\stm32f3xx_hal_msp.c</name>
             </file>
             <file>

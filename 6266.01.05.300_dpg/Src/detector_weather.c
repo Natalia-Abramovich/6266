@@ -7,7 +7,7 @@
 #include "push_pop.h"
 #include "main.h"
 #include "detector_weather.h"
-
+#include "stack.h"
 
 
 //template<class T>
@@ -17,9 +17,7 @@ uint16_t maxindexscattering;
 uint16_t minscattering;
 uint16_t minindexscattering;
 uint16_t maxminamplitude;
-/*uint16_t limitcipitation = 75;
-uint16_t sumlimit= 450;
-uint16_t sumlimitprecipitation = 400;*/
+
 uint32_t average; 
 bool bithazeorfog = false;
 bool bitdrizzle = false;
@@ -27,40 +25,47 @@ bool bitprecipitation = false;
 bool bitfog1 = false;
 bool bitfog2 = false;
 
+uint16_t  pheno_coll [9] = {0,0,0,0,0,0,0,0,0};
 uint8_t byteweather = 0;
+MyStack <uint8_t, 8> clear;
+MyStack <uint8_t, 8> haze;
+MyStack <uint8_t, 8> fog;
+MyStack <uint8_t, 8> precipitation;
+MyStack <uint8_t, 8> drizzle;
+MyStack <uint8_t, 8> rain;
+MyStack <uint8_t, 8> snow;
+MyStack <uint8_t, 8> rain_and_snow;
+MyStack <uint8_t, 8> hail;
 
-using namespace std;
-vector <bool> clear=  {0,0,0,0,0,0,0,0};
-vector <bool> haze=   {0,0,0,0,0,0,0,0};
-vector <bool> fog=    {0,0,0,0,0,0,0,0};
-vector <bool> precipitation = {0,0,0,0,0,0,0,0};
-vector <uint8_t> drizzle={0,0,0,0,0,0,0,0};
-vector <uint8_t> rain=   {0,0,0,0,0,0,0,0};
-vector <uint8_t> snow=   {0,0,0,0,0,0,0,0};
-vector <bool> rain_and_snow={0,0,0,0,0,0,0,0};
-vector <bool> hail=  {0,0,0,0,0,0,0,0};
+MyStack <uint8_t, 8>* minute2[] = {&clear, &haze, &fog, &precipitation, &drizzle, &hail, &rain_and_snow, &rain, &snow };
 
 uint8_t count_minute=0;
 uint8_t count_hour=0;
-vector <bool> clear_minute =  {0,0,0,0,0,0,0,0};
-vector <bool> haze_minute =   {0,0,0,0,0,0,0,0};
-vector <bool> fog_minute  =    {0,0,0,0,0,0,0,0};
-vector <bool> precipitation_minute = {0,0,0,0,0,0,0,0};
-vector <bool> drizzle_minute ={0,0,0,0,0,0,0,0};
-vector <bool> rain_minute ={0,0,0,0,0,0,0,0};
-vector <bool> snow_minute =   {0,0,0,0,0,0,0,0};
-vector <bool> rain_and_snow_minute={0,0,0,0,0,0,0,0};
-vector <bool> hail_minute =  {0,0,0,0,0,0,0,0};
 
-vector <bool> clear_hour =  {0,0,0,0};
-vector <bool> haze_hour =   {0,0,0,0};
-vector <bool> fog_hour =    {0,0,0,0};
-vector <bool> precipitation_hour = {0,0,0,0};
-vector <bool> drizzle_hour ={0,0,0,0};
-vector <bool> rain_hour =   {0,0,0,0};
-vector <bool> snow_hour =   {0,0,0,0};
-vector <bool> rain_and_snow_hour ={0,0,0,0};
-vector <bool> hail_hour =  {0,0,0,0};
+MyStack <uint8_t, 5> clear_m10;
+MyStack <uint8_t, 5> haze_m10;
+MyStack <uint8_t, 5> fog_m10;
+MyStack <uint8_t, 5> precipitation_m10;
+MyStack <uint8_t, 5> drizzle_m10;
+MyStack <uint8_t, 5> rain_m10;
+MyStack <uint8_t, 5> snow_m10;
+MyStack <uint8_t, 5> rain_and_snow_m10;
+MyStack <uint8_t, 5> hail_m10;
+
+MyStack <uint8_t, 5>* minute10[] = {&clear_m10, &haze_m10, &fog_m10, &precipitation_m10, &drizzle_m10, &hail_m10, &rain_and_snow_m10, &rain_m10, &snow_m10};
+
+MyStack <uint8_t, 6> clear_hour;
+MyStack <uint8_t, 6> haze_hour;
+MyStack <uint8_t, 6> fog_hour;
+MyStack <uint8_t, 6> precipitation_hour;
+MyStack <uint8_t, 6> drizzle_hour;
+MyStack <uint8_t, 6> rain_hour;
+MyStack <uint8_t, 6> snow_hour;
+MyStack <uint8_t, 6> rain_and_snow_hour;
+MyStack <uint8_t, 6> hail_hour;
+
+MyStack <uint8_t, 6>* hour[] = {&clear_hour, &haze_hour, &fog_hour, &precipitation_hour, &drizzle_hour, &hail_hour, &rain_and_snow_hour, &rain_hour, &snow_hour};
+
 
 uint8_t count_drizzle; 
 uint8_t count_precipitation;
@@ -218,83 +223,38 @@ void flag_weather( uint16_t* fscattering, float temperature)
 
 void clear_vectors()
 {
- clear.erase(clear.begin());
- clear.emplace_back(0);
- haze.erase(haze.begin());
- haze.emplace_back(0);
- fog.erase(fog.begin());
- fog.emplace_back(0);
- precipitation.erase(precipitation.begin());
- precipitation.emplace_back(0);
- drizzle.erase(drizzle.begin());
- drizzle.emplace_back(0);
- rain.erase(rain.begin());
- rain.emplace_back(0);
- snow.erase(snow.begin());
- snow.emplace_back(0);
- rain_and_snow.erase(rain_and_snow.begin());
- rain_and_snow.emplace_back(0);
- hail.erase(hail.begin());
- hail.emplace_back(0);  
+ for(int i = 0; i < 9; i++)
+  {
+    minute2[i]->push(0);
+  } 
 }
 
 void clear_vectors_vaisala()
 {
- clear_minute.erase(clear_minute.begin());
- clear_minute.emplace_back(0);
- haze_minute.erase(haze_minute.begin());
- haze_minute.emplace_back(0);
- fog_minute.erase(fog_minute.begin());
- fog_minute.emplace_back(0);
- precipitation_minute.erase(precipitation_minute.begin());
- precipitation_minute.emplace_back(0);
- drizzle_minute.erase(drizzle_minute.begin());
- drizzle_minute.emplace_back(0);
- rain_minute.erase(rain_minute.begin());
- rain_minute.emplace_back(0);
- snow_minute.erase(snow_minute.begin());
- snow_minute.emplace_back(0);
- rain_and_snow_minute.erase(rain_and_snow_minute.begin());
- rain_and_snow_minute.emplace_back(0);
- hail_minute.erase(hail_minute.begin());
- hail_minute.emplace_back(0);  
+  for(int i = 0; i < 9; i++)
+  {
+    minute10[i]->push(0);
+  } 
 }
+ 
+
 void clear_vectors_vaisala_hour()
 {
- clear_hour.erase(clear_hour.begin());
- clear_hour.emplace_back(0);
- haze_hour.erase(haze_hour.begin());
- haze_hour.emplace_back(0);
- fog_hour.erase(fog_hour.begin());
- fog_hour.emplace_back(0);
- precipitation_hour.erase(precipitation_hour.begin());
- precipitation_hour.emplace_back(0);
- drizzle_hour.erase(drizzle_hour.begin());
- drizzle_hour.emplace_back(0);
- rain_hour.erase(rain_hour.begin());
- rain_hour.emplace_back(0);
- snow_hour.erase(snow_hour.begin());
- snow_hour.emplace_back(0);
- rain_and_snow_hour.erase(rain_and_snow_hour.begin());
- rain_and_snow_hour.emplace_back(0);
- hail_hour.erase(hail_hour.begin());
- hail_hour.emplace_back(0);  
+for(int i = 0; i < 9; i++)
+  {
+    hour[i]->push(0);
+  }  
 }
 
 
-vector < uint16_t > pheno_coll(9, 0);
+
 //uint8_t const phenocodes[] = { 0x00, 0x04, 0x30, 0x40, 0x50, 0x60, 0x68, 0x70, 0x89};
 uint8_t vote_pheno_vaisala_hour(uint8_t index)
 { 
-  pheno_coll[0] = std::accumulate(clear_hour.begin(), clear_hour.end(), 0);
-  pheno_coll[1]= std::accumulate(haze_hour.begin(), haze_hour.end(), 0);
-  pheno_coll[2]= std::accumulate(fog_hour.begin(), fog_hour.end(), 0);
-  pheno_coll[3]= std::accumulate(precipitation_hour.begin(), precipitation_hour.end(), 0);
-  pheno_coll[4]= std::accumulate(drizzle_hour.begin(), drizzle_hour.end(), 0);
-  pheno_coll[5]= std::accumulate(hail_hour.begin(), hail_hour.end(), 0);
-  pheno_coll[6]= std::accumulate(rain_and_snow_hour.begin(), rain_and_snow_hour.end(), 0);
-  pheno_coll[7]= std::accumulate(rain_hour.begin(), rain_hour.end(), 0);
-  pheno_coll[8]= std::accumulate(snow_hour.begin(), snow_hour.end(), 0);  
+ for(int i = 0; i < 9; i++)
+  {
+    pheno_coll[i] = hour[i]->sum();
+  }
  
   int max_value= pheno_coll[0];
   int index_hour =0;
@@ -315,15 +275,10 @@ uint8_t vote_pheno_vaisala_hour(uint8_t index)
 
 uint8_t vote_pheno_vaisala(uint8_t index)
 {  
-  pheno_coll[0] = std::accumulate(clear_minute.begin(), clear_minute.end(), 0);
-  pheno_coll[1]= std::accumulate(haze_minute.begin(), haze_minute.end(), 0);
-  pheno_coll[2]= std::accumulate(fog_minute.begin(), fog_minute.end(), 0);
-  pheno_coll[3]= std::accumulate(precipitation_minute.begin(), precipitation_minute.end(), 0);
-  pheno_coll[4]= std::accumulate(drizzle_minute.begin(), drizzle_minute.end(), 0);
-  pheno_coll[5]= std::accumulate(hail_minute.begin(), hail_minute.end(), 0);
-  pheno_coll[6]= std::accumulate(rain_and_snow_minute.begin(), rain_and_snow_minute.end(), 0);
-  pheno_coll[7]= std::accumulate(rain_minute.begin(), rain_minute.end(), 0);
-  pheno_coll[8]= std::accumulate(snow_minute.begin(), snow_minute.end(), 0);
+  for(int i = 0; i < 9; i++)
+  {
+    pheno_coll[i] = minute10[i]->sum();
+  }
     
   int max_value= pheno_coll[0];
   int index_minute =0;
@@ -344,27 +299,7 @@ uint8_t filling_pheno_vaisala_hour(uint8_t index)
 {
   count_hour+=1;
   clear_vectors_vaisala_hour();
-  switch(index)
-  {
-    case 0: clear_hour[7]=1;
-    break;
-    case 1: haze_hour[7]=1;
-    break;
-    case 2: fog_hour[7]=1;
-    break;
-    case 3: precipitation_hour[7]=1;
-    break;
-    case 4: drizzle_hour[7]=1;
-    break;
-    case 5: hail_hour[7]=1;
-    break;
-    case 6: rain_and_snow_hour[7]=1;
-    break;
-    case 7: rain_hour[7]=1;
-    break;
-    case 8: snow_hour[7]=1;
-    break;  
-  }
+  hour[index] -> rewrite_last(1);
   count_minute=0;  
 }
 
@@ -372,53 +307,18 @@ uint8_t filling_pheno_vaisala(uint8_t index)
 {
   count_hour+=1;
   clear_vectors_vaisala();
-  switch(index)
-  {
-    case 0: clear_minute[7]=1;
-    break;
-    case 1: haze_minute[7]=1;
-    break;
-    case 2: fog_minute[7]=1;
-    break;
-    case 3: precipitation_minute[7]=1;
-    break;
-    case 4: drizzle_minute[7]=1;
-    break;
-    case 5: hail_minute[7]=1;
-    break;
-    case 6: rain_and_snow_minute[7]=1;
-    break;
-    case 7: rain_minute[7]=1;
-    break;
-    case 8: snow_minute[7]=1;
-    break;
-   
-    
-  }
+  minute10[index] -> rewrite_last(1);
   count_minute=0;  
 }
 
 uint8_t vote_pheno(void)
 {
- /* 
-  pheno_coll[3]= std::accumulate(precipitation.begin(), precipitation.end(), 0)*100;
-  pheno_coll[4]= std::accumulate(drizzle.begin(), drizzle.end(), 0)*100;
-  pheno_coll[5]= std::accumulate(rain.begin(), rain.end(), 0);
-  pheno_coll[6]= std::accumulate(rain_and_snow.begin(), rain_and_snow.end(), 0)*100;
-  pheno_coll[7]= std::accumulate(snow.begin(), snow.end(), 0);
-  pheno_coll[8]= std::accumulate(hail.begin(), hail.end(), 0)*100;*/
-  
-  pheno_coll[0] = std::accumulate(clear.begin(), clear.end(), 0)*100;
-  pheno_coll[1]= std::accumulate(haze.begin(), haze.end(), 0)*100;
-  pheno_coll[2]= std::accumulate(fog.begin(), fog.end(), 0)*100;
-  pheno_coll[3]= std::accumulate(precipitation.begin(), precipitation.end(), 0)*100;
-  pheno_coll[4]= std::accumulate(drizzle.begin(), drizzle.end(), 0);
-  pheno_coll[5]= std::accumulate(hail.begin(), hail.end(), 0)*100;
-  pheno_coll[6]= std::accumulate(rain_and_snow.begin(), rain_and_snow.end(), 0)*100;
-  pheno_coll[7]= std::accumulate(rain.begin(), rain.end(), 0);
-  pheno_coll[8]= std::accumulate(snow.begin(), snow.end(), 0);
+   for(int k = 0; k < 9; k++)
+  {
+    pheno_coll[k] = minute2[k]->sum();
+  }
 
-  int max_value=pheno_coll[8];
+  int max_value = pheno_coll[8];
   int index =8;
   int i=7;
   for ( ;i>=5; i--)
@@ -459,25 +359,6 @@ uint8_t vote_pheno(void)
     return index;
   } 
   else return 0;
- //////
-  /*int max_value=0;// pheno_coll[0];
-  int index =0;
-  int i=1;
-  for ( ;i<=8; i++)
-  {
-    if(pheno_coll[i] >= max_value)
-    {
-      index=i;
-      max_value = pheno_coll[i];
-    }
-  }  
-  
- if(max_value> thresholds.sumlimit) 
-  { 
-    return index;
-  } 
-  else return 0;*/
-///////
 }   
 
 void push_profile(uint8_t &stk_lvl, uint8_t max_stk_lvl, uint8_t &stk_idx, int16_t value, int16_t* stack)
@@ -673,15 +554,15 @@ void filling_vectors_precipitation(float temperature)
       percentsnow= amount_snow * 100/(amount_rain + amount_snow);     // процент вероятности снега
     }
     if(percentrain>thresholds.limitcipitation)
-      rain[7]=percentrain;
+      rain.rewrite_last(percentrain);
     if(percentsnow>thresholds.limitcipitation)
-      snow[7]=percentsnow;
+      snow.rewrite_last(percentsnow);
   
     if (percentrain == 0 && percentsnow == 0)	// матлаб не определил
     {
       if (bitprecipitation || bitdrizzle )	// но осадки есть
       {
-        precipitation[7] = 1;		//осадки неопределенного типа
+        precipitation.rewrite_last(100);		//осадки неопределенного типа
       }  
     else
       //если не осадки // морось ////есть дождь
@@ -689,20 +570,20 @@ void filling_vectors_precipitation(float temperature)
       {
         if (percentrain>0)
         {
-            drizzle[7] = percentrain;
-            rain[7] = 0;    
+            drizzle.rewrite_last(percentrain);
+            rain.rewrite_last(0);    
         }
        }
     
     }
    
     //снег и дождь 
-    double averaged_rain= std::accumulate(rain.begin(), rain.end(), 0);
-    double averaged_snow = std::accumulate(snow.begin(), snow.end(), 0);  
+    double averaged_rain= rain.sum();
+    double averaged_snow = snow.sum();
     if (averaged_rain <  thresholds.sumlimit && averaged_snow <  thresholds.sumlimit)
     {
       if((averaged_rain/8)>(100-thresholds.limitcipitation) && (averaged_snow/8)>(100-thresholds.limitcipitation)) 
-        rain_and_snow [7]= 1;    
+        rain_and_snow.rewrite_last(100);    
     } 
      bitdrizzle=0;
      bitprecipitation=0;
@@ -714,7 +595,7 @@ void filling_vectors_precipitation(float temperature)
     {
       if (bitprecipitation || bitdrizzle) 
       {
-        snow [7] = 100;				/*snow 100%*/
+        snow.rewrite_last(100);				/*snow 100%*/
       } 
       bitdrizzle=0;
       bitprecipitation=0;
@@ -735,17 +616,17 @@ void filling_vectors_precipitation(float temperature)
         }
         if (percenthail > 0) 
         {
-         hail[7] = 1;
+         hail.rewrite_last(100);
         }
       }
       if(bitprecipitation &&  percenthail<40)
       {
-        rain[7] = 100;    		/*Rain 100%*/
+        rain.rewrite_last(100);    		/*Rain 100%*/
       }
       else
       {
         if(bitdrizzle) 
-          drizzle [7] = 100;           /*Drizzle 100%*/
+          drizzle.rewrite_last(100);           /*Drizzle 100%*/
       }
       bitdrizzle=0;
       bitprecipitation=0;
@@ -763,7 +644,7 @@ void fill_vectors_weather(uint32_t visibility, float temperature )
   clear_vectors();
   if ( !bithazeorfog && !bitfog1 && ! bitfog2 && !bitdrizzle && !bitprecipitation )    /*Clear*/
   {
-    clear[7]=1;
+    clear.rewrite_last(100);
   }
   else
   {
@@ -771,18 +652,18 @@ void fill_vectors_weather(uint32_t visibility, float temperature )
     {
       if ( visibility < 1000 )
       {
-        fog[7]=1;     /*Fog*/
+        fog.rewrite_last(100);     /*Fog*/
       }
       else
       {
         if (visibility < 10000)
         {      
-          haze[7]=1; /*Haze*/
+          haze.rewrite_last(100); /*Haze*/
         }
         else
           if(!bitdrizzle && !bitprecipitation )
         { /*Clear*/
-          clear[7]=1;         
+          clear.rewrite_last(100);         
         }
       }
       bithazeorfog = 0;
@@ -822,9 +703,6 @@ uint8_t weather(uint32_t visibility, double temperature)
   }
   visibility=3800;
 */
-  
-  // //заполнение профиля + медианный фильтр 
- 
   
   culculate_precipitation(visibility, temperature);
   fill_vectors_weather(visibility, temperature);

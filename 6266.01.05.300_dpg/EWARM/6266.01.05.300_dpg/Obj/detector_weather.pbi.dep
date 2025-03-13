@@ -85,4 +85,5 @@ detector_weather.pbi: \
   E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\intrinsics.h \
   E:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\iar_intrinsics_common.h \
   E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\EWARM/../Inc/typedefs_6266.h \
-  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\Src/detector_weather.h
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\Src/detector_weather.h \
+  E:\project\6266_test\befor_boot\approximation\6266.01.05.300_dpg\Src/stack.h
