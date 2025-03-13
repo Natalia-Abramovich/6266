@@ -380,10 +380,7 @@ void read(uint8_t *b)
 //  HAL_GPIO_WritePin( M0_GPIO_Port, M0_Pin, GPIO_PIN_SET );
 //  HAL_GPIO_WritePin( M1_GPIO_Port, M1_Pin, GPIO_PIN_RESET );
   HAL_GPIO_WritePin( RDE_GPIO_Port, RDE_Pin, GPIO_PIN_SET );
-   if(b[3]==0x58&&  b[4]==0x0D)
-  {
-   read_32(X); 
-  }
+
   if(b[3]==0x4D &&  b[4]==0x4F && b[5]==0x52 && b[6]==0x0D) //RD MOR
   {
    read_d(pprs.MORmomentary);

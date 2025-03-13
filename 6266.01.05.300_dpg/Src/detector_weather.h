@@ -36,16 +36,3 @@ struct Thresholds__
 
 extern struct Thresholds__ thresholds; 
 
-
-struct Intensity__
-{
-  uint8_t rate_change = 15;     //rate of change of the function for the derivative
-  uint8_t filterwindow = 10;
-  uint8_t limitderivative = 100;
-  uint8_t limitfogduration = 50; 
-  uint8_t limitpretipitation = 500; 
-  uint8_t deltabeginend = 300; 
-};
-extern struct Intensity__ intensity;
-
-extern int X;

@@ -1464,6 +1464,12 @@
                 <name>$PROJ_DIR$\..\Src\i2c.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\intensity.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\intensity.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\iwdg.c</name>
             </file>
             <file>

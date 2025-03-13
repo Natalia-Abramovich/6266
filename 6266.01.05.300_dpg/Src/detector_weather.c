@@ -8,6 +8,7 @@
 #include "main.h"
 #include "detector_weather.h"
 #include "stack.h"
+#include "intensity.h"
 
 
 //template<class T>
@@ -73,7 +74,7 @@ uint8_t count_precipitation;
 int X=2;
 
 struct Thresholds__ thresholds;
-struct Intensity__ intensity;
+
 
 
 #define STOPPER 0                                      /* Smaller than any datum */
@@ -120,31 +121,7 @@ uint16_t ClassicMedianFilter(uint16_t* ptrArray)
     return returnValue;
 }
 
-/*void particle_scattering(uint16_t PS0x, uint16_t* fscattering)             //     получаем массив частиц рассеивания fscattering[10240] поэлементно вычитая значение фона из входного массива
-{
-  uint16_t median_filter_array[10] = {0};
-    for (int index_profile = 0; index_profile < size_array; index_profile++)
-    {
-        for (int index_median_ms = 0; index_median_ms < size_window; index_median_ms++)
-        {
-            if ((index_profile + index_median_ms - size_window / 2) < 0 || (index_profile + index_median_ms - size_window / 2 )>= size_array)
-                median_filter_array[index_median_ms] = 0;
-            else
-                median_filter_array[index_median_ms] = profile[index_profile + index_median_ms - size_window / 2];
-        }
-         fscattering[index_profile] = ClassicMedianFilter(median_filter_array, size_window);
-    }
-}*/
 
-/*void particle_scattering( uint16_t* fscattering)             //     аЇ«у· ҐмЎ¬бІ±йў у ±Ій¶ р ±±ж©ўб®Ёу ¦іcattering[10240] аЇЅм¦¬ж®Іо® гј·йі у §­бёҐо©Ґ р®­  й§ г¶®е®®д® р¬•ўрёЂЌ
-{
- 
-    for (int index_profile = 0; index_profile < size_array; index_profile++)
-    {
-       
-         fscattering[index_profile] = ClassicMedianFilter(median_filter_array, size_window);
-    }
-}*/
 void maxmin_scattering(uint16_t* fscattering)
 {                                                                 // РЅР°С…РѕРґРёРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЃРёРіРЅР°Р»Р° РїСЂСЏРјРѕРіРѕ СЂР°СЃСЃРµСЏРЅРёСЏ minscattering Рё РЅР°С…РѕРґРёРј СЃСЂРµРґРЅРµРµ Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ
    maxscattering = 0;
@@ -672,6 +649,7 @@ void fill_vectors_weather(uint32_t visibility, float temperature )
     }
     if 	(bitprecipitation || bitdrizzle)   			//precipitation
     {
+       algolithm_intensity(profile);
       filling_vectors_precipitation(temperature);    
       bitprecipitation=0;
       bitdrizzle=0;
@@ -697,12 +675,12 @@ int index_hour=0;
 
 uint8_t weather(uint32_t visibility, double temperature)
 {       
- /* for(int i=0;i<9652; i++)
+/*  for(int i=0;i<9120; i++)
   {
-    profile[i]=data_prof[i];
+    profile[i] = data_prof[i];
   }
-  visibility=3800;
-*/
+  visibility = 1000;*/
+
   
   culculate_precipitation(visibility, temperature);
   fill_vectors_weather(visibility, temperature);

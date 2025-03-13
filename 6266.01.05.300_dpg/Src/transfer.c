@@ -5,6 +5,7 @@
 #include "push_pop.h"
 #include "lib.h"
 #include "algorithm_contamination.h"
+#include "intensity.h"
 
 bool set_weather = 1;
 uint8_t message = 2;
@@ -53,12 +54,12 @@ void pkt_peleng(uint32_t send_val, uint16_t pogoda )
   obuf[8] = (send_val % 10ul) + '0';
   
   /*////////////////////*/
-/*  send_val = (uint32_t)pprs.PSmomentary;
+/**/  send_val = (uint32_t) (intensity.sum_intensity / 100);
   obuf[9] = (( send_val/ 10000ul) % 10ul) + '0';
   obuf[10] = (( send_val/ 1000ul) % 10ul) + '0';
   obuf[11] = (( send_val/ 100ul) % 10ul) + '0';
   obuf[12] = (( send_val/ 10ul) % 10ul) + '0';
-  obuf[13] = (send_val % 10ul) + '0';*/
+  obuf[13] = (send_val % 10ul) + '0';
  /*////////////////////*/
   //////
  /* if(set_weather)

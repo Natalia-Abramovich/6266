@@ -66,8 +66,6 @@ template< typename T, int size > T& MyStack< T, size >::min( void )
   return min;
 };
 
-
-
 //explicit instatiation 
 template class MyStack<double, 4>;
 template class MyStack<double, 10>;
