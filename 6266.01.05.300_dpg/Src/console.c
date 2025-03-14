@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include "intensity.h"
 
 uint32_t rs_adr = 1;   //address 
 uint32_t version = 0;   //version 
@@ -631,11 +632,23 @@ void read(uint8_t *b)
   {
      read_32(thresholds.sumlimit);
   }
-    if(find_subarray(b, "RD DELAY\r", 9))
+  if(find_subarray(b, "RD RATE\r", 8))
   {
-    read_32(del);  
+    read_32(intensity.rate_change);  
+  } 
+  if(find_subarray(b, "RD LIMITDERIVATIVE\r", 18))
+  {
+    read_32(intensity.limitderivative);  
   }
-  
+   if(find_subarray(b, "RD DELTABEGINEND\r", 15))
+  {
+    read_32(intensity.deltabeginend);  
+  }
+    if(find_subarray(b, "RD LIMITFOGDURATION\r", 15))
+  {
+    read_32(intensity.limitfogduration);  
+  }
+ 
      if(find_subarray(b, "RD OUT DELAY\r", 13))
   {
     read_32(out_del);  
@@ -1034,6 +1047,24 @@ void write(uint8_t *b)
     del = read_value_from_package(b, 8) ; 
     write123("delay",(del), 4160);
   }
+    if(find_subarray(b, "WR RATE", 7))
+  {
+    intensity.rate_change = read_value_from_package(b, 7) ;
+      
+  } 
+  if(find_subarray(b, "WR LIMITDERIVATIVE", 18))
+  {
+    intensity.limitderivative = read_value_from_package(b, 18) ;    
+  }
+   if(find_subarray(b, "WR DELTABEGINEND", 15))
+  {
+    intensity.deltabeginend = read_value_from_package(b, 16) ;    
+   
+  }
+    if(find_subarray(b, "WR LIMITFOGDURATION", 15))
+  {
+     intensity.limitfogduration = read_value_from_package(b, 19) ;    
+  }
    if(find_subarray(b, "WR OUT DELAY", 12))
   {
     out_del = read_value_from_package(b, 12) ; 
@@ -1047,6 +1078,7 @@ void write(uint8_t *b)
     if (amount_point>16) amount_point = 16;
     write123("amount_point",(amount_point), 4352);
   }
+  
   
   if(find_subarray(b, "WR F", 4))
   {

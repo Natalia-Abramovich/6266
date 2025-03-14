@@ -172,7 +172,7 @@ void algolithm_intensity(int16_t* profile)
 {
   intensity.value_intensity = 0;
 
-  uint16_t limitduration = 50;
+ // uint16_t limitduration = 50;
    
   uint8_t begin_flags[size_array/8];  
   memset(begin_flags, 0, size_array/8);
@@ -182,7 +182,7 @@ void algolithm_intensity(int16_t* profile)
   intensity_derivative(size_array-1, -1, end_flags, profile);
  
  
-  intensity.sum_intensity = find_one_drop(begin_flags, end_flags, limitduration, profile);
+  intensity.sum_intensity = find_one_drop(begin_flags, end_flags, intensity.limitfogduration, profile);
  // intensity.value_intensity =  intensity.sum_intensity * koeff * 10000 / size_array;
     
 }

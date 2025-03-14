@@ -5,7 +5,7 @@ struct Intensity__
   uint16_t limitderivative = 75;
   uint16_t limitfogduration = 50; 
   uint16_t limitprecipitation = 500; 
-  uint16_t deltabeginend = 300; 
+  uint16_t deltabeginend = 120;//300; 
   uint64_t sum_intensity = 0;
   double value_intensity;
   double light;
